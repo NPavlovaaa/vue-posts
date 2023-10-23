@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>Список постов</h3>
     <post-item-list
         v-for="post in posts"
         :post="post"
@@ -24,5 +25,8 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
+h3{
+  margin-top: 20px;
+}
 </style>

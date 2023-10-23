@@ -1,6 +1,8 @@
 <template>
-  <post-form @create="createPost"/>
-  <post-list :posts="posts"/>
+  <div class="app">
+    <post-form @create="createPost"/>
+    <post-list :posts="posts"/>
+  </div>
 </template>
 
 <script>
@@ -31,4 +33,12 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.app {
+  padding: 50px 100px;
+}
 </style>
