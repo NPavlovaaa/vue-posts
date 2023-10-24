@@ -11,9 +11,9 @@
 <!--      >-->
         Открыть
       </my-button>
-      <my-button>
-<!--          @click="$emit('remove', post)"-->
-<!--      >-->
+      <my-button
+          @click="$emit('remove', post)"
+      >
         Удалить
       </my-button>
     </div>
@@ -29,7 +29,7 @@ export default {
       type: Object,
       required: true,
     }
-  }
+  },
 }
 </script>
 
@@ -44,5 +44,6 @@ export default {
 }
 .post__btns {
   display: flex;
+  gap: 5px;
 }
 </style>
