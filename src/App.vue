@@ -5,12 +5,16 @@
       <my-button @click="showDialog">
         Создать пост
       </my-button>
+      <my-select
+          v-model="selectedSort"
+          :options="sortOptions"
+      />
     </div>
     <my-dialog v-model:show="visibleDialog">
       <post-form @create="createPost"/>
     </my-dialog>
     <post-list
-        :posts="posts"
+        :posts="sortedPosts"
         @remove="removePost"
         v-if="!isPostLoading"
     />
@@ -24,9 +28,11 @@ import PostList from "@/components/PostList";
 import MyDialog from "@/components/UI/MyDialog";
 import MyButton from "@/components/UI/MyButton";
 import axios from "axios";
+import MySelect from "@/components/UI/MySelect";
 
 export default {
   components: {
+    MySelect,
     MyDialog,
     PostForm,
     PostList,
@@ -36,7 +42,12 @@ export default {
     return{
       posts: [],
       visibleDialog: false,
-      isPostLoading: false
+      isPostLoading: false,
+      selectedSort: '',
+      sortOptions: [
+        {value: 'title', name: 'По названию'},
+        {value: 'body', name: 'По содержимому'},
+      ]
     }
   },
   methods: {
@@ -64,7 +75,12 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-  }
+  },
+  computed: {
+    sortedPosts(){
+      return [...this.posts].sort((post1, post2) => (post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])))
+    }
+  },
 }
 
 </script>
