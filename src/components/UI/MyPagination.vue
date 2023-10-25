@@ -4,9 +4,7 @@
         v-for="pageNumber in totalPages"
         :key="pageNumber"
         class="page"
-        :class="{
-              'current-page': page === pageNumber
-            }"
+        :class="{'current-page': page === pageNumber}"
         @click="changePage(pageNumber)"
     >
       {{ pageNumber }}
