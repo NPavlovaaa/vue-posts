@@ -20,6 +20,11 @@
         v-if="!isPostLoading"
     />
     <h3 v-else>Загрузка...</h3>
+    <my-pagination
+        :page="page"
+        :total-pages="totalPages"
+        @changePage="changePage"
+    />
   </div>
 </template>
 
@@ -31,9 +36,11 @@ import MyButton from "@/components/UI/MyButton";
 import axios from "axios";
 import MySelect from "@/components/UI/MySelect";
 import MyInput from "@/components/UI/MyInput";
+import MyPagination from "@/components/UI/MyPagination";
 
 export default {
   components: {
+    MyPagination,
     MyInput,
     MySelect,
     MyDialog,
@@ -48,6 +55,9 @@ export default {
       isPostLoading: false,
       selectedSort: '',
       search: '',
+      page: 1,
+      limit: 10,
+      totalPages: 0,
       sortOptions: [
         {value: 'title', name: 'По названию'},
         {value: 'body', name: 'По содержимому'},
@@ -65,10 +75,19 @@ export default {
     showDialog(){
       this.visibleDialog = true;
     },
+    changePage(pageNumber) {
+      this.page = pageNumber
+    },
     async fetchPosts(){
       try {
         this.isPostLoading = true;
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
         this.posts = response.data;
       } catch (e){
         alert(e.message)
@@ -88,6 +107,11 @@ export default {
       return this.sortedPosts.filter(item => item.title.toLowerCase().includes(this.search.toLowerCase()))
     }
   },
+  watch: {
+    page() {
+      this.fetchPosts()
+    }
+  }
 }
 
 </script>
