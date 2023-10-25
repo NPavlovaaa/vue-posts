@@ -20,11 +20,12 @@
         v-if="!isPostLoading"
     />
     <h3 v-else>Загрузка...</h3>
-    <my-pagination
-        :page="page"
-        :total-pages="totalPages"
-        @changePage="changePage"
-    />
+<!--    <my-pagination-->
+<!--        :page="page"-->
+<!--        :total-pages="totalPages"-->
+<!--        @changePage="changePage"-->
+<!--    />-->
+    <div v-intersection="loadMorePosts" class="observer"></div>
   </div>
 </template>
 
@@ -46,7 +47,7 @@ export default {
     MyDialog,
     PostForm,
     PostList,
-    MyButton
+    MyButton,
   },
   data(){
     return{
@@ -94,6 +95,21 @@ export default {
       } finally {
         this.isPostLoading = false;
       }
+    },
+    async loadMorePosts(){
+      try {
+        this.page += 1;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _page: this.page,
+            _limit: this.limit
+          }
+        });
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit);
+        this.posts = [...this.posts, ...response.data];
+      } catch (e){
+        alert(e.message)
+      }
     }
   },
   mounted() {
@@ -108,9 +124,9 @@ export default {
     }
   },
   watch: {
-    page() {
-      this.fetchPosts()
-    }
+    // page() {
+    //   this.fetchPosts()
+    // }
   }
 }
 
