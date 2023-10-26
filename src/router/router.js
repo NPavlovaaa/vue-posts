@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import MainPage from "@/pages/MainPage";
 import PostPage from "@/pages/PostPage";
+import PostPageCompositionApi from "@/pages/PostPageCompositionApi";
 
 const routes = [
     {
@@ -9,7 +10,7 @@ const routes = [
     },
     {
         path: '/posts',
-        component: PostPage
+        component: PostPageCompositionApi
     }
 ]
 
